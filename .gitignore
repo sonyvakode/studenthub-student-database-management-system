@@ -1,0 +1,26 @@
+# Node & Frontend
+node_modules/
+build/
+dist/
+coverage/
+*.log
+.env*
+!.env.example
+.DS_Store
+
+# Python & Backend
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.pytest_cache/
+*.db
+*.sqlite3
+!backend/students.db.example
+.env
+.env.*
+!.env.example
+node_modules/
+dist/

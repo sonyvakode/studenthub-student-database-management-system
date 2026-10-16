@@ -1,0 +1,6 @@
+{
+  "name": "StudentHub - Student Database Management System",
+  "description": "Professional student database management SaaS application for tracking student records, courses, enrollments, and educational metrics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
