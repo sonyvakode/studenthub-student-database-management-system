@@ -74,6 +74,28 @@ Open your web browser and navigate to `http://localhost:3000`.
 
 ---
 
+## Deploying to Vercel
+
+The root [`vercel.json`](./vercel.json) configures two Vercel services:
+
+- `app` builds the Vite frontend and serves public page routes.
+- `backend` runs the FastAPI application. Requests under `/api/` are routed to it.
+
+The browser calls the API through same-origin `/api` URLs. No service binding is
+needed: bindings are for server-side calls between services, while the frontend
+makes public HTTP requests through the `/api` rewrite.
+
+For a Vercel deployment, configure `DATABASE_URL` in the backend service's
+environment variables to point to a persistent PostgreSQL database. SQLite is
+the local-development default and is not durable across Vercel function
+instances. The backend accepts PostgreSQL URLs using the `psycopg` driver.
+
+The API is publicly reachable under `/api` (for example, `/api/health`). Configure
+database credentials in Vercel's environment settings; do not commit them to the
+repository.
+
+---
+
 ## 🧪 Testing the Complete CRUD Workflow
 
 Follow this step-by-step checklist to test and demonstrate every feature during your internship project review:

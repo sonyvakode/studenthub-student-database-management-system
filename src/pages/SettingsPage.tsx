@@ -18,9 +18,9 @@ export const SettingsPage: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Export JSON
-  const handleExportJSON = () => {
+  const handleExportJSON = async () => {
     try {
-      const dataStr = apiService.exportJSON();
+      const dataStr = await apiService.exportJSON();
       const blob = new Blob([dataStr], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -37,9 +37,9 @@ export const SettingsPage: React.FC = () => {
   };
 
   // Export CSV
-  const handleExportCSV = () => {
+  const handleExportCSV = async () => {
     try {
-      const csvStr = apiService.exportCSV();
+      const csvStr = await apiService.exportCSV();
       const blob = new Blob([csvStr], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -56,21 +56,25 @@ export const SettingsPage: React.FC = () => {
   };
 
   // Reset to default sample records
-  const handleResetSampleData = () => {
+  const handleResetSampleData = async () => {
     if (window.confirm('Are you sure you want to restore the initial sample students? Current modifications will be reset.')) {
-      apiService.resetToDefault();
-      info('Sample Records Restored', 'Restored the original sample student records.');
+      try {
+        await apiService.resetToDefault();
+        info('Sample Records Restored', 'Restored the original sample student records.');
+      } catch (err) {
+        toastError('Restore Failed', (err as Error).message);
+      }
     }
   };
 
   // Import JSON
-  const handleImportSubmit = (e: React.FormEvent) => {
+  const handleImportSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!importJsonText.trim()) return;
 
     setIsProcessing(true);
     try {
-      const count = apiService.importJSON(importJsonText);
+      const count = await apiService.importJSON(importJsonText);
       success('Import Successful', `Successfully imported ${count} student records.`);
       setImportJsonText('');
       setShowImportModal(false);

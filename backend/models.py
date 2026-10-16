@@ -1,6 +1,9 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime
 from datetime import datetime
-from .database import Base
+if __package__:
+    from .database import Base
+else:
+    from database import Base
 
 class Student(Base):
     __tablename__ = "students"

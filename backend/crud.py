@@ -1,7 +1,11 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, and_, func
-from .models import Student
-from .schemas import StudentCreate, StudentUpdate, StudentPatch
+if __package__:
+    from .models import Student
+    from .schemas import StudentCreate, StudentUpdate, StudentPatch
+else:
+    from models import Student
+    from schemas import StudentCreate, StudentUpdate, StudentPatch
 import re
 import os
 import httpx
@@ -122,6 +126,27 @@ def delete_student(db: Session, identifier: str) -> bool:
     db.delete(db_student)
     db.commit()
     return True
+
+def replace_students(db: Session, students: list[StudentCreate]) -> list[Student]:
+    db.query(Student).delete()
+    replacement_records = [
+        Student(
+            student_id=f"STU-{1001 + index:04d}",
+            name=student.name.strip(),
+            dob=student.dob.strip(),
+            email=student.email.strip() if student.email else None,
+            phone=student.phone.strip() if student.phone else None,
+            course=student.course.strip() if student.course else None,
+            address=student.address.strip() if student.address else None,
+            enrollment_date=student.enrollment_date.strip() if student.enrollment_date else None,
+        )
+        for index, student in enumerate(students)
+    ]
+    db.add_all(replacement_records)
+    db.commit()
+    for student in replacement_records:
+        db.refresh(student)
+    return replacement_records
 
 def get_dashboard_metrics(db: Session):
     total_students = db.query(Student).count()
